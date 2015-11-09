@@ -1,14 +1,13 @@
 Package.describe({
+  summary: 'Suite of tools to test and measure the performance of your Space system',
   name: 'space:performance',
   version: '0.1.0',
-  summary: 'Suite of tools to test and measure the performance of your Space system',
   git: 'https://github.com/meteor-space/performance.git',
-  documentation: 'README.md'
 });
 
 Package.onUse(function(api) {
 
-  api.versionsFrom('1.2.1');
+  api.versionsFrom("METEOR@1.0");
 
   api.use([
     'ejson',
