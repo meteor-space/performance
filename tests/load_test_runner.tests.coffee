@@ -27,24 +27,36 @@ describe 'Space.performance.LoadTestRunner', ->
     afterEach ->
       @testRun.finish()
 
+    it "throws error if missing run spec", ->
+      expect(@testRun.start).to.throw.error
+
+    it "throws error unless spec object is of type Space.performance.LoadTestRunSpec", ->
+      runWithoutValidSpec = -> @testRun.start({interval: 2, duration: 10})
+      expect(runWithoutValidSpec).to.throw.error
+
     it "updates it's state after starting", ->
       @testRun.start(new LoadTestRunSpec({interval: 2, duration: 10}))
       expect(@testRun._state).to.equal('running')
 
-    it "sends commands at the optional defined interval when running", (test, waitFor) ->
-      @testRun.start(new LoadTestRunSpec({interval: 2, duration: 15}))
+  describe 'running', ->
+
+    afterEach ->
+      @testRun.finish()
+
+    it "runs the provided function at approximately the defined interval", (test, waitFor) ->
+      @testRun.start(new LoadTestRunSpec({interval: 4, duration: 20}))
       timeout = =>
         try
-          expect(@testRun._iterations).to.be.within(4,6)
+          expect(@testRun._iterations).to.be.within(2,5)
         catch err
           test.exception err
-      Meteor.setTimeout(waitFor(timeout), 12);
+      Meteor.setTimeout(waitFor(timeout), 17);
 
-    it "runs for the optional specified duration", (test, waitFor) ->
-      @testRun.start(new LoadTestRunSpec({interval: 2, duration: 10}))
+    it "runs for the approximately the specified duration", (test, waitFor) ->
+      @testRun.start(new LoadTestRunSpec({interval: 4, duration: 10}))
       timeout = =>
         try
-          expect(@testRun._duration).to.be.within(8,12)
+          expect(@testRun._duration).to.be.within(9,20)
         catch err
           test.exception err
       Meteor.setTimeout(waitFor(timeout), 10);
@@ -54,12 +66,6 @@ describe 'Space.performance.LoadTestRunner', ->
       @testRun._stopWorker()
       expect(@testRun._state).to.equal 'running'
 
-    it "throws error if missing run spec", ->
-      expect(@testRun.start).to.throw.error
-
-    it "throws error unless spec object is of type Space.performance.LoadTestRunSpec", ->
-      runWithoutValidSpec = -> @testRun.start({interval: 2, duration: 10})
-      expect(runWithoutValidSpec).to.throw.error
 
   describe 'finishing', ->
 
