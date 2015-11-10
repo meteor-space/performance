@@ -1,12 +1,12 @@
 Space.messaging.define(Space.messaging.Event, 'Space.performance', {
 
-  LoadTestComplete: {
+  LoadTestRunComplete: {
     name: String,
     runSpec: Match.Optional(Space.performance.LoadTestRunSpec),
     iterations: Number,
     startDate: Date,
     endDate: Date,
-    actualDuration: Number,
+    duration: Number,
   }
 
 });

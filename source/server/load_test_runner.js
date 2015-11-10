@@ -1,5 +1,5 @@
 
-Space.Object.extend(Space.performance, 'LoadTest', {
+Space.Object.extend(Space.performance, 'LoadTestRunner', {
 
   ERRORS: {
     nameRequired: function() {
@@ -25,7 +25,7 @@ Space.Object.extend(Space.performance, 'LoadTest', {
   _iterations: null,
   _startDate: null,
   _endDate: null,
-  _actualDuration: null,
+  _duration: null,
 
   Constructor: function(name, runFunction) {
     if(!name) throw new Error(this.ERRORS.nameRequired());
@@ -35,7 +35,7 @@ Space.Object.extend(Space.performance, 'LoadTest', {
     this._state = 'ready';
   },
 
-  run: function(spec) {
+  start: function(spec) {
     if(this._state != 'ready') return;
     if(!spec) throw new Error(this.ERRORS.runSpecRequired());
     this._runSpec = spec;
@@ -55,14 +55,14 @@ Space.Object.extend(Space.performance, 'LoadTest', {
     this._state = 'finishing';
     this._stopWorker();
     this._endDate = new Date();
-    this._actualDuration = this._endDate - this._startDate;
-    var completedEvent = new Space.performance.LoadTestComplete({
+    this._duration = this._endDate - this._startDate;
+    var completedEvent = new Space.performance.LoadTestRunComplete({
       name: this.name,
       runSpec: this._runSpec,
       iterations: this._iterations,
       startDate: this._startDate,
       endDate: this._endDate,
-      actualDuration: this._actualDuration
+      duration: this._duration
     });
     this.publish(completedEvent);
     return this._state = 'ready';
@@ -83,4 +83,4 @@ Space.Object.extend(Space.performance, 'LoadTest', {
 
 });
 
-Space.performance.LoadTest.mixin(Space.messaging.EventPublishing);
+Space.performance.LoadTestRunner.mixin(Space.messaging.EventPublishing);

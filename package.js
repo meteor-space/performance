@@ -18,10 +18,16 @@ Package.onUse(function(api) {
     'space:messaging@2.1.0'
   ]);
 
+  api.addFiles('source/client/module.js','client');
+  api.addFiles('source/server/module.js','server');
+
   api.addFiles([
-    'source/server/module.js',
+    'source/commands.js'
+  ]);
+
+  api.addFiles([
     'source/server/value_objects/load_test_run_spec.js',
-    'source/server/load_test.js',
+    'source/server/load_test_runner.js',
     'source/server/events.js'
   ], 'server');
 
@@ -43,7 +49,7 @@ Package.onTest(function(api) {
   ]);
 
   api.addFiles([
-    'tests/load-test.tests.coffee',
+    'tests/load_test_runner.tests.coffee',
   ], 'server');
 
 });
